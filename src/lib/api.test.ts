@@ -1,5 +1,6 @@
+import { isHttpError } from '@sveltejs/kit';
 import { describe, expect, it, vi } from 'vitest';
-import { ApiError, apiGet, apiSend, buildUrl } from './api';
+import { ApiError, apiGet, apiSend, buildUrl, orHttpError } from './api';
 
 vi.mock('$app/env/public', () => ({ PUBLIC_API_URL: 'http://api.test/' }));
 
@@ -84,5 +85,34 @@ describe('apiSend', () => {
 			status: 500,
 			message: 'Erreur 500'
 		});
+	});
+});
+
+describe('orHttpError', () => {
+	it('passes the value through', async () => {
+		await expect(orHttpError(Promise.resolve(42))).resolves.toBe(42);
+	});
+
+	it('turns an ApiError into an http error', async () => {
+		const error = await orHttpError(Promise.reject(new ApiError(404, 'Introuvable'))).catch(
+			(e: unknown) => e
+		);
+
+		expect(isHttpError(error, 404)).toBe(true);
+		expect(error).toMatchObject({ body: { message: 'Introuvable' } });
+	});
+
+	it('maps an unreachable API to 503', async () => {
+		const error = await orHttpError(Promise.reject(new ApiError(0, 'Hors ligne'))).catch(
+			(e: unknown) => e
+		);
+
+		expect(isHttpError(error, 503)).toBe(true);
+	});
+
+	it('rethrows other errors untouched', async () => {
+		const boom = new Error('boom');
+
+		await expect(orHttpError(Promise.reject(boom))).rejects.toBe(boom);
 	});
 });

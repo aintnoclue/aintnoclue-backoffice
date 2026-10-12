@@ -1,3 +1,4 @@
+import { error } from '@sveltejs/kit';
 import { PUBLIC_API_URL } from '$app/env/public';
 
 type Fetch = typeof fetch;
@@ -48,6 +49,15 @@ export function apiSend<T>(
 		headers: body === undefined ? undefined : { 'Content-Type': 'application/json' },
 		body: body === undefined ? undefined : JSON.stringify(body)
 	});
+}
+
+export async function orHttpError<T>(promise: Promise<T>): Promise<T> {
+	try {
+		return await promise;
+	} catch (e) {
+		if (e instanceof ApiError) error(e.status >= 400 ? e.status : 503, e.message);
+		throw e;
+	}
 }
 
 async function request<T>(fetch: Fetch, url: string, init: RequestInit): Promise<T> {

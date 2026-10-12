@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { formatDate, formatTokens, formatUsd } from './format';
+import { formatDate, formatPrice, formatTokens, formatUsd } from './format';
 
 const nbsp = ' ';
 const nnbsp = ' ';
@@ -22,6 +22,18 @@ describe('formatUsd', () => {
 	it('shows a dash for a missing cost', () => {
 		expect(formatUsd(null)).toBe('—');
 		expect(formatUsd(undefined)).toBe('—');
+	});
+});
+
+describe('formatPrice', () => {
+	it('keeps up to 4 decimals with at least 2', () => {
+		expect(formatPrice(0.075)).toBe(`0,075${nbsp}$`);
+		expect(formatPrice(0.6)).toBe(`0,60${nbsp}$`);
+		expect(formatPrice(0.00375)).toBe(`0,0038${nbsp}$`);
+	});
+
+	it('shows a dash for a missing price', () => {
+		expect(formatPrice(null)).toBe('—');
 	});
 });
 
