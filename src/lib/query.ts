@@ -24,11 +24,14 @@ export type ParamUpdate = Record<string, string | number | null | undefined>;
 
 const DAY_MS = 24 * 60 * 60 * 1000;
 
-function readPositiveInt(url: ReadonlyURL, key: string): number | undefined {
-	const raw = url.searchParams.get(key);
+export function parseId(raw: string | null): number | undefined {
 	if (raw === null || !/^\d+$/.test(raw)) return undefined;
 	const value = Number(raw);
-	return value > 0 ? value : undefined;
+	return value > 0 && Number.isSafeInteger(value) ? value : undefined;
+}
+
+function readPositiveInt(url: ReadonlyURL, key: string): number | undefined {
+	return parseId(url.searchParams.get(key));
 }
 
 export function readSimulate(url: ReadonlyURL): number | undefined {

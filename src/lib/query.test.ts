@@ -1,7 +1,22 @@
 import { describe, expect, it } from 'vitest';
-import { readChartDays, readPage, readPeriod, readSimulate, withParams } from './query';
+import { parseId, readChartDays, readPage, readPeriod, readSimulate, withParams } from './query';
 
 const url = (search: string) => new URL(`http://admin.test/generations${search}`);
+
+describe('parseId', () => {
+	it('reads a positive integer', () => {
+		expect(parseId('12')).toBe(12);
+	});
+
+	it('rejects anything else', () => {
+		expect(parseId(null)).toBeUndefined();
+		expect(parseId('0')).toBeUndefined();
+		expect(parseId('-1')).toBeUndefined();
+		expect(parseId('1.5')).toBeUndefined();
+		expect(parseId('12abc')).toBeUndefined();
+		expect(parseId('99999999999999999999')).toBeUndefined();
+	});
+});
 
 describe('readSimulate', () => {
 	it('reads a positive model id', () => {

@@ -3,9 +3,10 @@
 	import DailyChart from '#lib/components/DailyChart.svelte';
 	import FiltersHeader from '#lib/components/FiltersHeader.svelte';
 	import SimulationBanner from '#lib/components/SimulationBanner.svelte';
+	import TokenLines from '#lib/components/TokenLines.svelte';
 	import { formatNumber, formatTokens, formatUsd } from '#lib/format.ts';
 	import { featureLabels } from '#lib/labels.ts';
-	import type { ExchangesUsageAverage, TokenUsage, UsageAverage, UsageTotals } from '#lib/types.ts';
+	import type { ExchangesUsageAverage, UsageAverage, UsageTotals } from '#lib/types.ts';
 	import type { PageProps } from './$types';
 
 	let { data }: PageProps = $props();
@@ -26,17 +27,6 @@
 <svelte:head>
 	<title>Vue d'ensemble · Dashboard IA</title>
 </svelte:head>
-
-{#snippet tokenLines(tokens: TokenUsage)}
-	<dl class="tokens">
-		<dt>Entrée</dt>
-		<dd>{formatTokens(tokens.inputTokens)}</dd>
-		<dt>dont cache</dt>
-		<dd>{formatTokens(tokens.cachedInputTokens)}</dd>
-		<dt>Sortie</dt>
-		<dd>{formatTokens(tokens.outputTokens)}</dd>
-	</dl>
-{/snippet}
 
 {#snippet usageRow(label: string, usage: UsageTotals)}
 	<tr>
@@ -83,7 +73,7 @@
 	</div>
 	<div class="card">
 		<p class="label">Tokens</p>
-		{@render tokenLines(overview.totals.tokens)}
+		<TokenLines tokens={overview.totals.tokens} />
 	</div>
 </div>
 
@@ -106,7 +96,7 @@
 					· {formatNumber(average.avgExchanges)} échanges en moyenne
 				{/if}
 			</p>
-			{@render tokenLines(average.avgTokens)}
+			<TokenLines tokens={average.avgTokens} />
 		</div>
 	{/each}
 </div>
@@ -138,44 +128,3 @@
 		</tbody>
 	</table>
 </div>
-
-<style>
-	.label {
-		margin: 0;
-		font-size: 0.85rem;
-		font-weight: 600;
-		text-transform: uppercase;
-		letter-spacing: 0.03em;
-		color: var(--text-muted);
-	}
-
-	.value {
-		margin: 0.25rem 0;
-		font-size: 1.6rem;
-		font-weight: 700;
-		font-variant-numeric: tabular-nums;
-	}
-
-	.card .muted {
-		margin: 0 0 0.75rem;
-		font-size: 0.85rem;
-	}
-
-	.tokens {
-		display: grid;
-		grid-template-columns: auto 1fr;
-		gap: 0.15rem 1rem;
-		margin: 0;
-		font-size: 0.9rem;
-	}
-
-	.tokens dt {
-		color: var(--text-muted);
-	}
-
-	.tokens dd {
-		margin: 0;
-		text-align: right;
-		font-variant-numeric: tabular-nums;
-	}
-</style>

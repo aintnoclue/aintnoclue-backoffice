@@ -35,6 +35,24 @@ const usdAxis = new Intl.NumberFormat('fr-FR', {
 
 const compact = new Intl.NumberFormat('fr-FR', { notation: 'compact', maximumFractionDigits: 1 });
 
+const percent = new Intl.NumberFormat('fr-FR', {
+	style: 'percent',
+	signDisplay: 'exceptZero',
+	maximumFractionDigits: 1
+});
+
+const milliseconds = new Intl.NumberFormat('fr-FR', {
+	style: 'unit',
+	unit: 'millisecond',
+	maximumFractionDigits: 0
+});
+
+const seconds = new Intl.NumberFormat('fr-FR', {
+	style: 'unit',
+	unit: 'second',
+	maximumFractionDigits: 1
+});
+
 const dayShort = new Intl.DateTimeFormat('fr-FR', {
 	day: '2-digit',
 	month: '2-digit',
@@ -64,6 +82,16 @@ export function formatTokens(value: number | null | undefined): string {
 export function formatNumber(value: number | null | undefined): string {
 	if (value === null || value === undefined) return EMPTY;
 	return decimal.format(value);
+}
+
+export function formatPercent(ratio: number | null | undefined): string {
+	if (ratio === null || ratio === undefined) return EMPTY;
+	return percent.format(ratio);
+}
+
+export function formatDuration(ms: number | null | undefined): string {
+	if (ms === null || ms === undefined) return EMPTY;
+	return ms < 1000 ? milliseconds.format(ms) : seconds.format(ms / 1000);
 }
 
 export function formatDate(value: string | Date | null | undefined): string {

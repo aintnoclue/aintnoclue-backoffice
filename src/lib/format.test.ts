@@ -3,7 +3,9 @@ import {
 	formatCompact,
 	formatDate,
 	formatDay,
+	formatDuration,
 	formatNumber,
+	formatPercent,
 	formatPrice,
 	formatTokens,
 	formatUsd,
@@ -66,6 +68,37 @@ describe('formatNumber', () => {
 
 	it('shows a dash for a missing value', () => {
 		expect(formatNumber(undefined)).toBe('—');
+	});
+});
+
+describe('formatPercent', () => {
+	it('signs non-zero ratios', () => {
+		expect(formatPercent(15.6667)).toBe(`+1${nnbsp}566,7${nbsp}%`);
+		expect(formatPercent(-0.5)).toBe(`-50${nbsp}%`);
+	});
+
+	it('shows zero without a sign', () => {
+		expect(formatPercent(0)).toBe(`0${nbsp}%`);
+		expect(formatPercent(-0.0004)).toBe(`0${nbsp}%`);
+	});
+
+	it('shows a dash for a missing ratio', () => {
+		expect(formatPercent(null)).toBe('—');
+	});
+});
+
+describe('formatDuration', () => {
+	it('shows milliseconds below one second', () => {
+		expect(formatDuration(850)).toBe(`850${nnbsp}ms`);
+	});
+
+	it('shows seconds with one decimal from one second', () => {
+		expect(formatDuration(1000)).toBe(`1${nnbsp}s`);
+		expect(formatDuration(12_345)).toBe(`12,3${nnbsp}s`);
+	});
+
+	it('shows a dash for a missing duration', () => {
+		expect(formatDuration(undefined)).toBe('—');
 	});
 });
 

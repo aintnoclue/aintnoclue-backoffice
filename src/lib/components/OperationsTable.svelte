@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { resolve } from '$app/paths';
 	import { formatDate, formatTokens, formatUsd } from '#lib/format.ts';
 	import type { OperationSummaryDto } from '#lib/types.ts';
 
@@ -10,7 +11,7 @@
 
 	let { items, showCharacter = false, emptyLabel }: Props = $props();
 
-	const columnCount = $derived(showCharacter ? 8 : 7);
+	const columnCount = $derived(showCharacter ? 9 : 8);
 </script>
 
 <div class="table-wrap">
@@ -27,6 +28,7 @@
 				<th class="num">dont cache</th>
 				<th class="num">Sortie</th>
 				<th class="num">Coût</th>
+				<th></th>
 			</tr>
 		</thead>
 		<tbody>
@@ -50,6 +52,9 @@
 					<td class="num">{formatTokens(operation.tokens.cachedInputTokens)}</td>
 					<td class="num">{formatTokens(operation.tokens.outputTokens)}</td>
 					<td class="num">{formatUsd(operation.costUsd)}</td>
+					<td>
+						<a href={resolve('/operations/[id]', { id: String(operation.id) })}>Détail</a>
+					</td>
 				</tr>
 			{:else}
 				<tr>
