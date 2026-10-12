@@ -1,5 +1,14 @@
 import { describe, expect, it } from 'vitest';
-import { formatDate, formatNumber, formatPrice, formatTokens, formatUsd } from './format';
+import {
+	formatCompact,
+	formatDate,
+	formatDay,
+	formatNumber,
+	formatPrice,
+	formatTokens,
+	formatUsd,
+	formatUsdAxis
+} from './format';
 
 const nbsp = ' ';
 const nnbsp = ' ';
@@ -68,5 +77,31 @@ describe('formatDate', () => {
 	it('shows a dash for a missing or invalid date', () => {
 		expect(formatDate(null)).toBe('—');
 		expect(formatDate('not a date')).toBe('—');
+	});
+});
+
+describe('formatUsdAxis', () => {
+	it('keeps 3 significant digits', () => {
+		expect(formatUsdAxis(0.0025)).toBe(`0,0025${nbsp}$`);
+		expect(formatUsdAxis(12.5)).toBe(`12,5${nbsp}$`);
+		expect(formatUsdAxis(0)).toBe(`0${nbsp}$`);
+	});
+});
+
+describe('formatCompact', () => {
+	it('shortens large numbers', () => {
+		expect(formatCompact(1_500_000)).toBe(`1,5${nbsp}M`);
+		expect(formatCompact(250)).toBe('250');
+	});
+});
+
+describe('formatDay', () => {
+	it('formats a UTC day without shifting it', () => {
+		expect(formatDay('2026-10-01')).toBe('01/10');
+		expect(formatDay('2026-10-01', 'long')).toBe('1 oct. 2026');
+	});
+
+	it('shows a dash for an invalid day', () => {
+		expect(formatDay('nope')).toBe('—');
 	});
 });

@@ -18,6 +18,8 @@ export const periodOptions: PeriodOption[] = [
 
 export const DEFAULT_PERIOD: Period = '30d';
 
+export const ALL_PERIOD_CHART_DAYS = 90;
+
 export type ParamUpdate = Record<string, string | number | null | undefined>;
 
 const DAY_MS = 24 * 60 * 60 * 1000;
@@ -50,6 +52,11 @@ export function readPeriod(url: ReadonlyURL, now = new Date()): { period: Period
 		period: option.value,
 		from: new Date(today - (option.days - 1) * DAY_MS).toISOString()
 	};
+}
+
+export function readChartDays(url: ReadonlyURL): number {
+	const { period } = readPeriod(url);
+	return periodOptions.find((option) => option.value === period)?.days ?? ALL_PERIOD_CHART_DAYS;
 }
 
 export function withParams(url: ReadonlyURL, params: ParamUpdate): ResolvedPathname {

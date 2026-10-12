@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { readPage, readPeriod, readSimulate, withParams } from './query';
+import { readChartDays, readPage, readPeriod, readSimulate, withParams } from './query';
 
 const url = (search: string) => new URL(`http://admin.test/generations${search}`);
 
@@ -48,6 +48,17 @@ describe('readPeriod', () => {
 		const expected = { period: '30d', from: '2026-09-13T00:00:00.000Z' };
 		expect(readPeriod(url(''), now)).toEqual(expected);
 		expect(readPeriod(url('?period=1y'), now)).toEqual(expected);
+	});
+});
+
+describe('readChartDays', () => {
+	it('follows the selected period', () => {
+		expect(readChartDays(url('?period=7d'))).toBe(7);
+		expect(readChartDays(url(''))).toBe(30);
+	});
+
+	it('shows 90 days for all', () => {
+		expect(readChartDays(url('?period=all'))).toBe(90);
 	});
 });
 

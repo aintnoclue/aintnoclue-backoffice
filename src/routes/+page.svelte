@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { resolve } from '$app/paths';
+	import DailyChart from '#lib/components/DailyChart.svelte';
 	import PeriodSelect from '#lib/components/PeriodSelect.svelte';
 	import SimulateSelect from '#lib/components/SimulateSelect.svelte';
 	import SimulationBanner from '#lib/components/SimulationBanner.svelte';
@@ -92,6 +93,12 @@
 		{@render tokenLines(overview.totals.tokens)}
 	</div>
 </div>
+
+<h2>Par jour</h2>
+{#if data.period === 'all'}
+	<p class="muted">Le graphique couvre les 90 derniers jours.</p>
+{/if}
+<DailyChart days={data.daily.days} />
 
 <h2>Moyennes</h2>
 <div class="cards">

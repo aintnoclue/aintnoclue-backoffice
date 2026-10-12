@@ -26,6 +26,23 @@ const integer = new Intl.NumberFormat('fr-FR', { maximumFractionDigits: 0 });
 
 const decimal = new Intl.NumberFormat('fr-FR', { maximumFractionDigits: 1 });
 
+const usdAxis = new Intl.NumberFormat('fr-FR', {
+	style: 'currency',
+	currency: 'USD',
+	currencyDisplay: 'narrowSymbol',
+	maximumSignificantDigits: 3
+});
+
+const compact = new Intl.NumberFormat('fr-FR', { notation: 'compact', maximumFractionDigits: 1 });
+
+const dayShort = new Intl.DateTimeFormat('fr-FR', {
+	day: '2-digit',
+	month: '2-digit',
+	timeZone: 'UTC'
+});
+
+const dayLong = new Intl.DateTimeFormat('fr-FR', { dateStyle: 'medium', timeZone: 'UTC' });
+
 const dateTime = new Intl.DateTimeFormat('fr-FR', { dateStyle: 'short', timeStyle: 'short' });
 
 export function formatUsd(value: number | null | undefined): string {
@@ -54,4 +71,18 @@ export function formatDate(value: string | Date | null | undefined): string {
 	const date = typeof value === 'string' ? new Date(value) : value;
 	if (Number.isNaN(date.getTime())) return EMPTY;
 	return dateTime.format(date);
+}
+
+export function formatUsdAxis(value: number): string {
+	return usdAxis.format(value);
+}
+
+export function formatCompact(value: number): string {
+	return compact.format(value);
+}
+
+export function formatDay(day: string, style: 'short' | 'long' = 'short'): string {
+	const date = new Date(`${day}T00:00:00.000Z`);
+	if (Number.isNaN(date.getTime())) return EMPTY;
+	return (style === 'short' ? dayShort : dayLong).format(date);
 }
