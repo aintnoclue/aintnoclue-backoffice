@@ -41,7 +41,11 @@
 				{#if operation.investigationId === null}
 					<span class="muted" title="L'enquête n'a pas été créée">—</span>
 				{:else}
-					Enquête #{operation.investigationId}
+					<a
+						href={resolve('/games/[investigationId]', {
+							investigationId: String(operation.investigationId)
+						})}>Enquête #{operation.investigationId}</a
+					>
 				{/if}
 			</dd>
 			{#if !isGeneration}
