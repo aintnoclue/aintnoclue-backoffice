@@ -24,6 +24,8 @@ const price = new Intl.NumberFormat('fr-FR', {
 
 const integer = new Intl.NumberFormat('fr-FR', { maximumFractionDigits: 0 });
 
+const decimal = new Intl.NumberFormat('fr-FR', { maximumFractionDigits: 1 });
+
 const dateTime = new Intl.DateTimeFormat('fr-FR', { dateStyle: 'short', timeStyle: 'short' });
 
 export function formatUsd(value: number | null | undefined): string {
@@ -40,6 +42,11 @@ export function formatPrice(value: number | null | undefined): string {
 export function formatTokens(value: number | null | undefined): string {
 	if (value === null || value === undefined) return EMPTY;
 	return integer.format(value);
+}
+
+export function formatNumber(value: number | null | undefined): string {
+	if (value === null || value === undefined) return EMPTY;
+	return decimal.format(value);
 }
 
 export function formatDate(value: string | Date | null | undefined): string {

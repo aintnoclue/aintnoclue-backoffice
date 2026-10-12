@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { formatDate, formatPrice, formatTokens, formatUsd } from './format';
+import { formatDate, formatNumber, formatPrice, formatTokens, formatUsd } from './format';
 
 const nbsp = ' ';
 const nnbsp = ' ';
@@ -45,6 +45,18 @@ describe('formatTokens', () => {
 
 	it('shows a dash for a missing value', () => {
 		expect(formatTokens(null)).toBe('—');
+	});
+});
+
+describe('formatNumber', () => {
+	it('keeps one decimal', () => {
+		expect(formatNumber(2.5)).toBe('2,5');
+		expect(formatNumber(2.46)).toBe('2,5');
+		expect(formatNumber(3)).toBe('3');
+	});
+
+	it('shows a dash for a missing value', () => {
+		expect(formatNumber(undefined)).toBe('—');
 	});
 });
 
