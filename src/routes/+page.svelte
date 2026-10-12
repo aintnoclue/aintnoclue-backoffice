@@ -1,8 +1,7 @@
 <script lang="ts">
 	import { resolve } from '$app/paths';
 	import DailyChart from '#lib/components/DailyChart.svelte';
-	import PeriodSelect from '#lib/components/PeriodSelect.svelte';
-	import SimulateSelect from '#lib/components/SimulateSelect.svelte';
+	import FiltersHeader from '#lib/components/FiltersHeader.svelte';
 	import SimulationBanner from '#lib/components/SimulationBanner.svelte';
 	import { formatNumber, formatTokens, formatUsd } from '#lib/format.ts';
 	import { featureLabels } from '#lib/labels.ts';
@@ -63,13 +62,7 @@
 	</thead>
 {/snippet}
 
-<header class="toolbar">
-	<h1>Vue d'ensemble</h1>
-	<div class="filters">
-		<PeriodSelect />
-		<SimulateSelect models={data.models} />
-	</div>
-</header>
+<FiltersHeader title="Vue d'ensemble" models={data.models} />
 
 <SimulationBanner pricedWith={overview.pricedWith} />
 
@@ -147,25 +140,6 @@
 </div>
 
 <style>
-	.toolbar {
-		display: flex;
-		align-items: center;
-		justify-content: space-between;
-		flex-wrap: wrap;
-		gap: 1rem;
-		margin-bottom: 1.5rem;
-	}
-
-	.toolbar h1 {
-		margin: 0;
-	}
-
-	.filters {
-		display: flex;
-		flex-wrap: wrap;
-		gap: 1rem;
-	}
-
 	.label {
 		margin: 0;
 		font-size: 0.85rem;
