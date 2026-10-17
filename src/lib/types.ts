@@ -14,6 +14,7 @@ export interface AiModelDto {
 	apiName: string;
 	inputPrice: number;
 	cachedInputPrice: number | null;
+	cacheWritePrice: number;
 	outputPrice: number;
 	createdAt: string;
 	updatedAt: string;
@@ -25,6 +26,7 @@ export interface CreateAiModelInput {
 	apiName: string;
 	inputPrice: number;
 	cachedInputPrice?: number | null;
+	cacheWritePrice?: number;
 	outputPrice: number;
 }
 

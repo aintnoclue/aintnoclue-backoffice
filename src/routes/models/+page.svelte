@@ -86,6 +86,7 @@
 				<th>Identifiant API</th>
 				<th class="num">Entrée</th>
 				<th class="num">Entrée en cache</th>
+				<th class="num">Écriture en cache</th>
 				<th class="num">Sortie</th>
 				<th class="num">Requêtes</th>
 				<th></th>
@@ -102,6 +103,13 @@
 							<span class="muted" title="Même prix que l'entrée">—</span>
 						{:else}
 							{formatPrice(model.cachedInputPrice)}
+						{/if}
+					</td>
+					<td class="num">
+						{#if model.cacheWritePrice === 0}
+							<span class="muted" title="Même prix que l'entrée">—</span>
+						{:else}
+							{formatPrice(model.cacheWritePrice)}
 						{/if}
 					</td>
 					<td class="num">{formatPrice(model.outputPrice)}</td>
@@ -123,7 +131,7 @@
 				</tr>
 			{:else}
 				<tr>
-					<td colspan="7" class="muted">Aucun modèle enregistré.</td>
+					<td colspan="8" class="muted">Aucun modèle enregistré.</td>
 				</tr>
 			{/each}
 		</tbody>

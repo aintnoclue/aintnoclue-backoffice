@@ -18,6 +18,7 @@
 	let apiName = $state(initial?.apiName ?? '');
 	let inputPrice = $state<number | null | undefined>(initial?.inputPrice);
 	let cachedInputPrice = $state<number | null | undefined>(initial?.cachedInputPrice);
+	let cacheWritePrice = $state<number | null | undefined>(initial?.cacheWritePrice || undefined);
 	let outputPrice = $state<number | null | undefined>(initial?.outputPrice);
 
 	let submitting = $state(false);
@@ -33,6 +34,7 @@
 				apiName: apiName.trim(),
 				inputPrice: inputPrice ?? 0,
 				cachedInputPrice: cachedInputPrice ?? null,
+				cacheWritePrice: cacheWritePrice ?? 0,
 				outputPrice: outputPrice ?? 0
 			});
 		} catch (e) {
@@ -73,6 +75,16 @@
 			<input
 				type="number"
 				bind:value={cachedInputPrice}
+				min="0"
+				step="any"
+				placeholder="Même prix que l'entrée"
+			/>
+		</label>
+		<label>
+			Écriture en cache ($ / 1M tokens)
+			<input
+				type="number"
+				bind:value={cacheWritePrice}
 				min="0"
 				step="any"
 				placeholder="Même prix que l'entrée"
