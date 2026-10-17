@@ -137,6 +137,10 @@
 					<dd>{formatTokens(hoveredPoint.tokens.inputTokens)}</dd>
 					<dt>dont cache</dt>
 					<dd>{formatTokens(hoveredPoint.tokens.cachedInputTokens)}</dd>
+					{#if hoveredPoint.tokens.cacheWriteTokens > 0}
+						<dt>dont écriture cache</dt>
+						<dd>{formatTokens(hoveredPoint.tokens.cacheWriteTokens)}</dd>
+					{/if}
 					<dt>Sortie</dt>
 					<dd>{formatTokens(hoveredPoint.tokens.outputTokens)}</dd>
 				</dl>

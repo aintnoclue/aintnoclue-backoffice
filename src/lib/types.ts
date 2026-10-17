@@ -5,6 +5,7 @@ export type AiFeature = 'INVESTIGATION_DETAILS' | 'INVESTIGATION_SUSPECTS' | 'CH
 export interface TokenUsage {
 	inputTokens: number;
 	cachedInputTokens: number;
+	cacheWriteTokens: number;
 	outputTokens: number;
 }
 

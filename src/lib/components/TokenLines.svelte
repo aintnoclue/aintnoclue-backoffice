@@ -14,6 +14,10 @@
 	<dd>{formatTokens(tokens.inputTokens)}</dd>
 	<dt>dont cache</dt>
 	<dd>{formatTokens(tokens.cachedInputTokens)}</dd>
+	{#if tokens.cacheWriteTokens > 0}
+		<dt>dont écriture cache</dt>
+		<dd>{formatTokens(tokens.cacheWriteTokens)}</dd>
+	{/if}
 	<dt>Sortie</dt>
 	<dd>{formatTokens(tokens.outputTokens)}</dd>
 </dl>
