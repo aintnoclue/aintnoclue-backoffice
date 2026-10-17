@@ -3,7 +3,9 @@ import type { AiFeature, AiOperationKind } from './types';
 export const featureLabels: Record<AiFeature, string> = {
 	INVESTIGATION_DETAILS: "Détails de l'enquête",
 	INVESTIGATION_SUSPECTS: 'Suspects',
-	CHARACTER_ANSWER: "Réponse d'un suspect"
+	CHARACTER_ANSWER: "Réponse d'un suspect",
+	INVESTIGATION_SCENARIO: "Scénario de l'enquête",
+	INVESTIGATION_CASTING: 'Casting des personnages'
 };
 
 export const operationKindLabels: Record<AiOperationKind, string> = {

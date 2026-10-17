@@ -1,6 +1,11 @@
 export type AiOperationKind = 'INVESTIGATION_GENERATION' | 'CHARACTER_EXCHANGE';
 
-export type AiFeature = 'INVESTIGATION_DETAILS' | 'INVESTIGATION_SUSPECTS' | 'CHARACTER_ANSWER';
+export type AiFeature =
+	| 'INVESTIGATION_DETAILS'
+	| 'INVESTIGATION_SUSPECTS'
+	| 'CHARACTER_ANSWER'
+	| 'INVESTIGATION_SCENARIO'
+	| 'INVESTIGATION_CASTING';
 
 export interface TokenUsage {
 	inputTokens: number;
