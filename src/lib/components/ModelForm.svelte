@@ -1,7 +1,13 @@
 <script lang="ts">
 	import { untrack } from 'svelte';
 	import { ApiError } from '#lib/api.ts';
-	import type { AiModelDto, CreateAiModelInput } from '#lib/types.ts';
+	import { reasoningEffortLabels, serviceTierLabels } from '#lib/labels.ts';
+	import type {
+		AiModelDto,
+		AiReasoningEffort,
+		AiServiceTier,
+		CreateAiModelInput
+	} from '#lib/types.ts';
 
 	interface Props {
 		model?: AiModelDto;
@@ -12,10 +18,13 @@
 	let { model, onsubmit, oncancel }: Props = $props();
 
 	const initial = untrack(() => model);
-	const apiNameLocked = (initial?.requestCount ?? 0) > 0;
+	const variantLocked = (initial?.requestCount ?? 0) > 0;
+	const lockedTitle = 'Non modifiable : ce modèle a déjà des requêtes enregistrées';
 
 	let name = $state(initial?.name ?? '');
 	let apiName = $state(initial?.apiName ?? '');
+	let reasoningEffort = $state<AiReasoningEffort | null>(initial?.reasoningEffort ?? null);
+	let serviceTier = $state<AiServiceTier | null>(initial?.serviceTier ?? null);
 	let inputPrice = $state<number | null | undefined>(initial?.inputPrice);
 	let cachedInputPrice = $state<number | null | undefined>(initial?.cachedInputPrice);
 	let cacheWritePrice = $state<number | null | undefined>(initial?.cacheWritePrice || undefined);
@@ -32,6 +41,8 @@
 			await onsubmit({
 				name: name.trim(),
 				apiName: apiName.trim(),
+				reasoningEffort,
+				serviceTier,
 				inputPrice: inputPrice ?? 0,
 				cachedInputPrice: cachedInputPrice ?? null,
 				cacheWritePrice: cacheWritePrice ?? 0,
@@ -60,11 +71,35 @@
 				required
 				pattern="\S+"
 				placeholder="gpt-4o-mini"
-				readonly={apiNameLocked}
-				title={apiNameLocked
-					? 'Non modifiable : ce modèle a déjà des requêtes enregistrées'
-					: 'Sans espaces'}
+				readonly={variantLocked}
+				title={variantLocked ? lockedTitle : 'Sans espaces'}
 			/>
+		</label>
+		<label>
+			Effort de raisonnement
+			<select
+				bind:value={reasoningEffort}
+				disabled={variantLocked}
+				title={variantLocked ? lockedTitle : undefined}
+			>
+				<option value={null}>Non précisé</option>
+				{#each Object.entries(reasoningEffortLabels) as [value, label] (value)}
+					<option {value}>{label}</option>
+				{/each}
+			</select>
+		</label>
+		<label>
+			Vitesse
+			<select
+				bind:value={serviceTier}
+				disabled={variantLocked}
+				title={variantLocked ? lockedTitle : undefined}
+			>
+				<option value={null}>Non précisé</option>
+				{#each Object.entries(serviceTierLabels) as [value, label] (value)}
+					<option {value}>{label}</option>
+				{/each}
+			</select>
 		</label>
 		<label>
 			Entrée ($ / 1M tokens)
@@ -129,7 +164,8 @@
 		margin: 1rem 0 0;
 	}
 
-	input[readonly] {
+	input[readonly],
+	select:disabled {
 		opacity: 0.6;
 		cursor: not-allowed;
 	}

@@ -3,10 +3,23 @@
 	import { ApiError, apiSend } from '#lib/api.ts';
 	import ModelForm from '#lib/components/ModelForm.svelte';
 	import { formatPrice, formatTokens } from '#lib/format.ts';
+	import { reasoningEffortLabels, serviceTierLabels } from '#lib/labels.ts';
 	import type { AiModelDto, CreateAiModelInput } from '#lib/types.ts';
 	import type { PageProps } from './$types';
 
 	type Editing = { mode: 'create' } | { mode: 'edit'; model: AiModelDto };
+
+	const unsetTitle = 'Non précisé : couvre toutes les valeurs';
+
+	function deleteBlockedReason(model: AiModelDto): string | undefined {
+		if (model.features.length > 0) {
+			return 'Suppression impossible : ce modèle est affecté à une fonctionnalité';
+		}
+		if (model.requestCount > 0) {
+			return 'Suppression impossible : ce modèle a des requêtes enregistrées';
+		}
+		return undefined;
+	}
 
 	let { data }: PageProps = $props();
 
@@ -21,7 +34,10 @@
 	}
 
 	async function update(model: AiModelDto, input: CreateAiModelInput) {
-		const body = model.requestCount > 0 ? { ...input, apiName: undefined } : input;
+		const body =
+			model.requestCount > 0
+				? { ...input, apiName: undefined, reasoningEffort: undefined, serviceTier: undefined }
+				: input;
 		await apiSend(fetch, 'PATCH', `/admin/models/${model.id}`, body);
 		await invalidateAll();
 		editing = null;
@@ -57,8 +73,8 @@
 </header>
 
 <p class="muted">
-	Prix en dollars par million de tokens. Les coûts sont rattachés aux requêtes par l'identifiant
-	API.
+	Prix en dollars par million de tokens. Les coûts sont rattachés aux requêtes par l'identifiant API
+	et les réglages. Un réglage non précisé couvre toutes les valeurs.
 </p>
 
 {#if editing?.mode === 'create'}
@@ -84,6 +100,8 @@
 			<tr>
 				<th>Nom</th>
 				<th>Identifiant API</th>
+				<th>Effort</th>
+				<th>Vitesse</th>
 				<th class="num">Entrée</th>
 				<th class="num">Entrée en cache</th>
 				<th class="num">Écriture en cache</th>
@@ -97,6 +115,20 @@
 				<tr>
 					<td>{model.name}</td>
 					<td><code>{model.apiName}</code></td>
+					<td>
+						{#if model.reasoningEffort === null}
+							<span class="muted" title={unsetTitle}>—</span>
+						{:else}
+							{reasoningEffortLabels[model.reasoningEffort]}
+						{/if}
+					</td>
+					<td>
+						{#if model.serviceTier === null}
+							<span class="muted" title={unsetTitle}>—</span>
+						{:else}
+							{serviceTierLabels[model.serviceTier]}
+						{/if}
+					</td>
 					<td class="num">{formatPrice(model.inputPrice)}</td>
 					<td class="num">
 						{#if model.cachedInputPrice === null}
@@ -116,14 +148,10 @@
 					<td class="num">{formatTokens(model.requestCount)}</td>
 					<td class="row-actions">
 						<button onclick={() => (editing = { mode: 'edit', model })}>Modifier</button>
-						<span
-							title={model.requestCount > 0
-								? 'Suppression impossible : ce modèle a des requêtes enregistrées'
-								: undefined}
-						>
+						<span title={deleteBlockedReason(model)}>
 							<button
 								class="danger"
-								disabled={model.requestCount > 0 || deletingId === model.id}
+								disabled={deleteBlockedReason(model) !== undefined || deletingId === model.id}
 								onclick={() => remove(model)}>Supprimer</button
 							>
 						</span>
@@ -131,7 +159,7 @@
 				</tr>
 			{:else}
 				<tr>
-					<td colspan="8" class="muted">Aucun modèle enregistré.</td>
+					<td colspan="10" class="muted">Aucun modèle enregistré.</td>
 				</tr>
 			{/each}
 		</tbody>

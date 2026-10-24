@@ -7,6 +7,15 @@ export type AiFeature =
 	| 'INVESTIGATION_SCENARIO'
 	| 'INVESTIGATION_CASTING';
 
+export type AiReasoningEffort = 'NONE' | 'MINIMAL' | 'LOW' | 'MEDIUM' | 'HIGH' | 'XHIGH' | 'MAX';
+
+export type AiServiceTier = 'DEFAULT' | 'FLEX' | 'PRIORITY';
+
+export interface ModelSettings {
+	reasoningEffort: AiReasoningEffort | null;
+	serviceTier: AiServiceTier | null;
+}
+
 export interface TokenUsage {
 	inputTokens: number;
 	cachedInputTokens: number;
@@ -14,7 +23,7 @@ export interface TokenUsage {
 	outputTokens: number;
 }
 
-export interface AiModelDto {
+export interface AiModelDto extends ModelSettings {
 	id: number;
 	name: string;
 	apiName: string;
@@ -24,12 +33,15 @@ export interface AiModelDto {
 	outputPrice: number;
 	createdAt: string;
 	updatedAt: string;
+	features: AiFeature[];
 	requestCount: number;
 }
 
 export interface CreateAiModelInput {
 	name: string;
 	apiName: string;
+	reasoningEffort?: AiReasoningEffort | null;
+	serviceTier?: AiServiceTier | null;
 	inputPrice: number;
 	cachedInputPrice?: number | null;
 	cacheWritePrice?: number;
