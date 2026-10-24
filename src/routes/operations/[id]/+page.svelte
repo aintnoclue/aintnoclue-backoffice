@@ -5,7 +5,7 @@
 	import SimulationBanner from '#lib/components/SimulationBanner.svelte';
 	import TokenLines from '#lib/components/TokenLines.svelte';
 	import { formatDate, formatDuration, formatTokens, formatUsd } from '#lib/format.ts';
-	import { featureLabels, operationKindLabels } from '#lib/labels.ts';
+	import { featureLabels, modelSettingsLabel, operationKindLabels } from '#lib/labels.ts';
 	import type { PageProps } from './$types';
 
 	let { data }: PageProps = $props();
@@ -84,9 +84,15 @@
 		</thead>
 		<tbody>
 			{#each operation.requests as request (request.id)}
+				{@const settings = modelSettingsLabel(request)}
 				<tr>
 					<td>{featureLabels[request.feature]}</td>
-					<td>{request.model}</td>
+					<td>
+						{request.model}
+						{#if settings}
+							<span class="muted">{settings}</span>
+						{/if}
+					</td>
 					<td class="num">{formatTokens(request.tokens.inputTokens)}</td>
 					<td class="num">{formatTokens(request.tokens.cachedInputTokens)}</td>
 					<td class="num">{formatTokens(request.tokens.outputTokens)}</td>

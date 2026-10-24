@@ -5,7 +5,7 @@
 
 	interface Props {
 		title: string;
-		models: Pick<AiModelDto, 'id' | 'name'>[];
+		models: Pick<AiModelDto, 'id' | 'name' | 'reasoningEffort' | 'serviceTier'>[];
 		period?: boolean;
 	}
 

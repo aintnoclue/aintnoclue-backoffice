@@ -60,7 +60,7 @@ export interface PricedTokens {
 	costUsd: number | null;
 }
 
-export interface ModelComparison {
+export interface ModelComparison extends ModelSettings {
 	modelId: number;
 	name: string;
 	apiName: string;
@@ -134,7 +134,7 @@ export interface OperationSummaryDto extends UsageTotals {
 
 export type OperationsPageDto = Page<OperationSummaryDto>;
 
-export interface OperationRequestDto {
+export interface OperationRequestDto extends ModelSettings {
 	id: number;
 	feature: AiFeature;
 	model: string;
