@@ -50,6 +50,17 @@ export interface CreateAiModelInput {
 
 export type UpdateAiModelInput = Partial<CreateAiModelInput>;
 
+export interface AiModelSummary extends ModelSettings {
+	id: number;
+	name: string;
+	apiName: string;
+}
+
+export interface FeatureModelDto {
+	feature: AiFeature;
+	model: AiModelSummary | null;
+}
+
 export interface PricedWith {
 	id: number;
 	name: string;
