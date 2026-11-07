@@ -1,11 +1,12 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
 	import { page } from '$app/state';
+	import { modelLabel } from '#lib/labels.ts';
 	import { readSimulate, withParams } from '#lib/query.ts';
 	import type { AiModelDto } from '#lib/types.ts';
 
 	interface Props {
-		models: Pick<AiModelDto, 'id' | 'name'>[];
+		models: Pick<AiModelDto, 'id' | 'name' | 'reasoningEffort' | 'serviceTier'>[];
 	}
 
 	let { models }: Props = $props();
@@ -25,7 +26,7 @@
 	<select value={selected} onchange={select}>
 		<option value="">Tarifs réels</option>
 		{#each models as model (model.id)}
-			<option value={model.id}>{model.name}</option>
+			<option value={model.id}>{modelLabel(model)}</option>
 		{/each}
 	</select>
 </label>

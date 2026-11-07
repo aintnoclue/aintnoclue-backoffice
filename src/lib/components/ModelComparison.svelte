@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { actualCost, costDelta } from '#lib/comparison.ts';
 	import { formatPercent, formatUsd } from '#lib/format.ts';
+	import { modelSettingsLabel } from '#lib/labels.ts';
 	import type { ModelComparison } from '#lib/types.ts';
 
 	interface Props {
@@ -24,10 +25,11 @@
 		<tbody>
 			{#each comparison as model (model.modelId)}
 				{@const delta = costDelta(model.costUsd, reference)}
+				{@const settings = modelSettingsLabel(model)}
 				<tr class:highlight={model.isActual}>
 					<td>
 						{model.name}
-						<span class="muted">{model.apiName}</span>
+						<span class="muted">{model.apiName}{settings ? ` · ${settings}` : ''}</span>
 						{#if model.isActual}
 							<span class="tag">réel</span>
 						{/if}

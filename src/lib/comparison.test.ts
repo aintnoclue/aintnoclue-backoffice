@@ -6,6 +6,8 @@ const model = (modelId: number, costUsd: number, isActual = false): ModelCompari
 	modelId,
 	name: `Model ${modelId}`,
 	apiName: `model-${modelId}`,
+	reasoningEffort: null,
+	serviceTier: null,
 	costUsd,
 	isActual
 });

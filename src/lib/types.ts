@@ -7,6 +7,15 @@ export type AiFeature =
 	| 'INVESTIGATION_SCENARIO'
 	| 'INVESTIGATION_CASTING';
 
+export type AiReasoningEffort = 'NONE' | 'MINIMAL' | 'LOW' | 'MEDIUM' | 'HIGH' | 'XHIGH' | 'MAX';
+
+export type AiServiceTier = 'DEFAULT' | 'FLEX' | 'PRIORITY';
+
+export interface ModelSettings {
+	reasoningEffort: AiReasoningEffort | null;
+	serviceTier: AiServiceTier | null;
+}
+
 export interface TokenUsage {
 	inputTokens: number;
 	cachedInputTokens: number;
@@ -14,7 +23,7 @@ export interface TokenUsage {
 	outputTokens: number;
 }
 
-export interface AiModelDto {
+export interface AiModelDto extends ModelSettings {
 	id: number;
 	name: string;
 	apiName: string;
@@ -24,12 +33,15 @@ export interface AiModelDto {
 	outputPrice: number;
 	createdAt: string;
 	updatedAt: string;
+	features: AiFeature[];
 	requestCount: number;
 }
 
 export interface CreateAiModelInput {
 	name: string;
 	apiName: string;
+	reasoningEffort?: AiReasoningEffort | null;
+	serviceTier?: AiServiceTier | null;
 	inputPrice: number;
 	cachedInputPrice?: number | null;
 	cacheWritePrice?: number;
@@ -37,6 +49,17 @@ export interface CreateAiModelInput {
 }
 
 export type UpdateAiModelInput = Partial<CreateAiModelInput>;
+
+export interface AiModelSummary extends ModelSettings {
+	id: number;
+	name: string;
+	apiName: string;
+}
+
+export interface FeatureModelDto {
+	feature: AiFeature;
+	model: AiModelSummary | null;
+}
 
 export interface PricedWith {
 	id: number;
@@ -48,7 +71,7 @@ export interface PricedTokens {
 	costUsd: number | null;
 }
 
-export interface ModelComparison {
+export interface ModelComparison extends ModelSettings {
 	modelId: number;
 	name: string;
 	apiName: string;
@@ -122,7 +145,7 @@ export interface OperationSummaryDto extends UsageTotals {
 
 export type OperationsPageDto = Page<OperationSummaryDto>;
 
-export interface OperationRequestDto {
+export interface OperationRequestDto extends ModelSettings {
 	id: number;
 	feature: AiFeature;
 	model: string;

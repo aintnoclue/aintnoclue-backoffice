@@ -12,7 +12,8 @@
 		{ path: resolve('/generations'), label: 'Générations' },
 		{ path: resolve('/exchanges'), label: 'Échanges' },
 		{ path: resolve('/games'), label: 'Parties' },
-		{ path: resolve('/models'), label: 'Modèles' }
+		{ path: resolve('/models'), label: 'Modèles' },
+		{ path: resolve('/features'), label: 'Fonctionnalités' }
 	];
 
 	const home = resolve('/');
